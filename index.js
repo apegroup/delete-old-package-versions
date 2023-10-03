@@ -1,23 +1,23 @@
-const { getInput, setFailed } = require('@actions/core')
-const { context } = require('@actions/github')
-const { Octokit } = require('@octokit/core')
-const { paginateRest } = require('@octokit/plugin-paginate-rest')
+const core = require('@actions/core')
+const github = require('@actions/github')
+const octokitCore = require('@octokit/core')
+const paginate = require('@octokit/plugin-paginate-rest')
 
 
 async function run() {
     try {
         // get all input parameters
-        const packageNames = getInput('package-names').split(",").map(p => p.trim())
-        const minVersionsToKeep = Number(getInput('min-versions-to-keep'))
-        const token = getInput('token')
+        const packageNames = core.getInput('package-names').split(",").map(p => p.trim())
+        const minVersionsToKeep = Number(core.getInput('min-versions-to-keep'))
+        const token = core.getInput('token')
 
         // initialize github octokit api
-        const MyOctokit = Octokit.plugin(paginateRest);
+        const MyOctokit = octokitCore.Octokit.plugin(paginate.paginateRest);
         const octokit = new MyOctokit({ auth: token });
 
         // get github context information
-        const owner = context.repo.owner
-        const repo = context.repo.repo
+        const owner = github.context.repo.owner
+        const repo = github.context.repo.repo
 
         // get all packages for the current repository
         const packages = await octokit.paginate('GET /repos/{owner}/{repo}/packages', {
@@ -63,6 +63,6 @@ async function run() {
         }
 
     } catch (e) {
-        setFailed(e)
+        core.setFailed(e)
     }
 }
