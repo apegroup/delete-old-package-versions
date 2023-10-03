@@ -14,6 +14,6 @@ run npm to fetch node modules
 to publish a new version push a new tag to main:
 
 ```bash
-  git tag v5.0.0-test26 HEAD
+  git tag v1.0.0 HEAD
   git push origin --tags  
 ```

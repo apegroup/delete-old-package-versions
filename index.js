@@ -28,6 +28,7 @@ async function run() {
 
         // only keep packages that match the input packagenames
         const packagesThatMatchNames = packages.filter(p => packageNames.includes(p.name))
+        console.info(`found ${packagesThatMatchNames.length} packages to delete versions for`)
 
         // for every package in this repository
         for (const repoPackage of packagesThatMatchNames) {
@@ -43,6 +44,7 @@ async function run() {
 
             // select all but the X most recent package versions
             const versionsToDelete = versions.splice(0, minVersionsToKeep);
+            console.info(`deleting ${versionsToDelete.length} versions for package "${repoPackage.name}"`)
 
 
             // delete all package versions we dont want to keep
@@ -55,6 +57,9 @@ async function run() {
                     package_version_id: version.versionId,
                 });
             }
+
+            console.info(`deleted ${versionsToDelete.length} versions for package "${repoPackage.name}"`)
+
         }
 
     } catch (e) {
