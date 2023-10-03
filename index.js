@@ -52,7 +52,7 @@ async function run() {
                     org: owner,
                     package_type: packageType,
                     package_name: repoPackage.name,
-                    package_version_id: version.name,
+                    package_version_id: version.id,
                 });
             }
 
