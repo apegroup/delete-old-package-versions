@@ -65,3 +65,5 @@ async function run() {
         core.setFailed(e)
     }
 }
+
+run() // execute script
