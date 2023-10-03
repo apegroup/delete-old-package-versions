@@ -1,0 +1,34 @@
+
+name: Delete Old Package Versions
+
+description: Deletes all versions of the packages defined by the "package-names" besides the "min-versions-to-keep"
+
+inputs:
+
+
+ 
+  package-names:
+    description: >
+      Names of the package, 
+      needs to be formatted as "package1, package2, package3, ..."
+    required: true
+
+  min-versions-to-keep:
+    description: >
+      Number of versions to keep starting with the latest version
+      By default keeps no version.
+      To delete all versions set this as 0.
+    required: true
+
+  token:
+    description: >
+      Personal Access Token with the necessary scopes to delete package versions.
+    required: true
+
+runs:
+  using: node16
+  main: index.js
+
+branding:
+  icon: package
+  color: black
