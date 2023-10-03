@@ -42,12 +42,13 @@ async function run() {
             });
 
             // select all but the X most recent package versions
-            const versionsToDelete = versions.splice(0, minVersionsToKeep);
-            console.info(`deleting ${versionsToDelete.length} versions for package "${repoPackage.name}"`)
+            versions.splice(0, minVersionsToKeep);
+            console.info(`deleting ${versions.length} versions for package "${repoPackage.name}"`)
 
 
             // delete all package versions we dont want to keep
-            for (const version of versionsToDelete) {
+            for (const version of versions) {
+                // TODO run in parrallel (Promise.all)
                 await octokit.request('DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}', {
                     org: owner,
                     package_type: packageType,
@@ -56,7 +57,7 @@ async function run() {
                 });
             }
 
-            console.info(`deleted ${versionsToDelete.length} versions for package "${repoPackage.name}"`)
+            console.info(`deleted ${versions.length} versions for package "${repoPackage.name}"`)
 
         }
 
