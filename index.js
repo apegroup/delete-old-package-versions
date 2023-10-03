@@ -9,6 +9,7 @@ async function run() {
         const packageNames = core.getInput('package-names').split(",").map(p => p.trim())
         const minVersionsToKeep = Number(core.getInput('min-versions-to-keep'))
         const token = core.getInput('token')
+        const packageType = core.getInput('package-type')
 
         // initialize github octokit api
         const MyOctokit = octokitCore.Octokit.plugin(paginate.paginateRest);
@@ -20,6 +21,7 @@ async function run() {
 
         // get all packages for the current repository
         const packages = await octokit.paginate('GET /orgs/{org}/packages', {
+            package_type: packageType,
             org: owner,
             per_page: 100,
         });
@@ -34,7 +36,7 @@ async function run() {
             // fetch all the versiobs of this package
             const versions = await octokit.paginate('GET /orgs/{org}/packages/{package_type}/{package_name}/versions', {
                 org: owner,
-                package_type: repoPackage.package_type,
+                package_type: packageType,
                 package_name: repoPackage.name,
                 per_page: 100,
             });
@@ -48,7 +50,7 @@ async function run() {
             for (const version of versionsToDelete) {
                 await octokit.request('DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}', {
                     org: owner,
-                    package_type: repoPackage.package_type,
+                    package_type: packageType,
                     package_name: repoPackage.name,
                     package_version_id: version.versionId,
                 });

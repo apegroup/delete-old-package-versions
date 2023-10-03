@@ -16,6 +16,12 @@ inputs:
       To delete all versions set this as 0.
     required: true
 
+  package-type:
+    description: >
+      type of github packages to delete. needs to be one of:
+      npm, maven, rubygems, docker, nuget, container
+    required: true
+
   token:
     description: >
       Personal Access Token with the necessary scopes to delete package versions.
