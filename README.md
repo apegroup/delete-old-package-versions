@@ -17,3 +17,15 @@ to publish a new version push a new tag to main:
   git tag v1.0.0 HEAD
   git push origin --tags  
 ```
+
+## How to use
+
+```yaml
+- name: Delete packages
+  uses: apegroup/delete-old-package-versions@v0.0.13
+  with:
+    package-names: ${{ env.PACKAGE_NAMES }}
+    min-versions-to-keep: 10 # Keep the 10 most recent releases.
+    package-type: maven
+    token: ${{ secrets.GITHUB_TOKEN }}
+```
