@@ -19,9 +19,8 @@ async function run() {
         const repo = github.context.repo.repo
 
         // get all packages for the current repository
-        const packages = await octokit.paginate('GET /repos/{owner}/{repo}/packages', {
-            owner: owner,
-            repo: repo,
+        const packages = await octokit.paginate('GET /orgs/{org}/packages', {
+            org: owner,
             per_page: 100,
         });
 
@@ -33,9 +32,8 @@ async function run() {
         for (const repoPackage of packagesThatMatchNames) {
 
             // fetch all the versiobs of this package
-            const versions = await octokit.paginate('GET /repos/{owner}/{repo}/packages/{package_type}/{package_name}/versions', {
-                owner: owner,
-                repo: repo,
+            const versions = await octokit.paginate('GET /orgs/{org}/packages/{package_type}/{package_name}/versions', {
+                org: owner,
                 package_type: repoPackage.package_type,
                 package_name: repoPackage.name,
                 per_page: 100,
@@ -48,9 +46,8 @@ async function run() {
 
             // delete all package versions we dont want to keep
             for (const version of versionsToDelete) {
-                await octokit.request('DELETE /repos/{owner}/{repo}/packages/{package_type}/{package_name}/versions/{package_version_id}', {
-                    owner: owner,
-                    repo: repo,
+                await octokit.request('DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}', {
+                    org: owner,
                     package_type: repoPackage.package_type,
                     package_name: repoPackage.name,
                     package_version_id: version.versionId,
