@@ -3,7 +3,6 @@ const github = require('@actions/github')
 const octokitCore = require('@octokit/core')
 const paginate = require('@octokit/plugin-paginate-rest')
 
-
 async function run() {
     try {
         // get all input parameters
