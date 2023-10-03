@@ -1,7 +1,7 @@
-import { getInput, setFailed } from '@actions/core'
-import { context } from '@actions/github'
-import { Octokit } from '@octokit/core'
-import { paginateRest } from '@octokit/plugin-paginate-rest'
+const { getInput, setFailed } = require('@actions/core')
+const { context } = require('@actions/github')
+const { Octokit } = require('@octokit/core')
+const { paginateRest } = require('@octokit/plugin-paginate-rest')
 
 
 async function run() {
