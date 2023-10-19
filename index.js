@@ -17,7 +17,6 @@ async function run() {
 
         // get github context information
         const owner = github.context.repo.owner
-        const repo = github.context.repo.repo
 
         // get all packages for the current repository
         const packages = await octokit.paginate('GET /orgs/{org}/packages', {
@@ -47,18 +46,17 @@ async function run() {
 
 
             // delete all package versions we dont want to keep
-            for (const version of versions) {
-                // TODO run in parrallel (Promise.all)
-                await octokit.request('DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}', {
+            const deletableVersionPromises = versions.map(version => {
+                return octokit.request('DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}', {
                     org: owner,
                     package_type: packageType,
                     package_name: repoPackage.name,
                     package_version_id: version.id,
                 });
-            }
+            })
+            await Promise.all(deletableVersionPromises)
 
             console.info(`deleted ${versions.length} versions for package "${repoPackage.name}"`)
-
         }
 
     } catch (e) {
